@@ -2,6 +2,8 @@
 
 ## Docs
 
+- **[GO-LIVE-RUNBOOK.md](GO-LIVE-RUNBOOK.md) — start here.** The ordered
+  checklist from "code built" to "AI booking meetings" (Gimmeleads lead-gen dialer).
 - [docs/centerfy-calling-workflow.md](docs/centerfy-calling-workflow.md) — how to
   build the Centerfy outbound Voice-AI calling workflow (agent + workflow +
   limits) that the dialer feeds and the bridge reports on.

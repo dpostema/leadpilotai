@@ -22,17 +22,19 @@ export function extractContact(payload) {
   };
 }
 
-/** Build a human-readable note body from the call result. */
+/** Build a human-readable note body from the call result.
+ *  Tolerates both our clean shape and GHL's native snake_case field names. */
 export function formatNote(payload) {
   const call = payload.call || {};
-  const lines = ["📞 LeadPilot AI (Centerfy) call result"];
+  const recording = call.recordingUrl || call.recording_url || "";
+  const lines = ["📞 Gimmeleads (Centerfy) call result"];
   if (payload.event) lines.push(`Event: ${payload.event}`);
   if (call.status) lines.push(`Status: ${call.status}`);
   if (call.disposition) lines.push(`Disposition: ${call.disposition}`);
   if (call.duration) lines.push(`Duration: ${call.duration}s`);
   if (call.summary) lines.push(`\nSummary:\n${call.summary}`);
   if (call.transcript) lines.push(`\nTranscript:\n${call.transcript}`);
-  if (call.recordingUrl) lines.push(`\nRecording: ${call.recordingUrl}`);
+  if (recording) lines.push(`\nRecording: ${recording}`);
   return lines.join("\n");
 }
 

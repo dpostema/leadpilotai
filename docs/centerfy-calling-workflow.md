@@ -24,38 +24,45 @@ and the bridge writes the results back to MogulOS. Full loop.
 ## Step 1 — Build the Voice AI agent
 
 Settings → **Integrations → AI Voice** (or **Centerfy AI Assistant**) → create an
-agent. The agent's behavior is driven entirely by its **system prompt**. Start
-from this template (edit the bracketed bits):
+agent. The agent's behavior is driven entirely by its **system prompt**. This is
+the finalized Gimmeleads prompt for the no-website-audit funnel — paste it as-is,
+tweak the calendar/slot wording to match your calendar:
 
 ```
-You are Riley, a friendly, concise scheduling assistant calling on behalf of
-[COMPANY] — [ONE-LINE WHAT YOU DO]. You are calling local businesses.
+You are Riley, a warm, concise assistant calling on behalf of Gimmeleads.
+You call local businesses that don't currently have a website.
 
-GOAL: find out if this business is a fit for [OFFER], and if so, book a short
-[MEETING TYPE] on the calendar. Booking the meeting is success.
+GOAL: get the owner/manager interested in a FREE, no-obligation demo of what a
+website for their business could look like, and book a 15-minute review call to
+walk them through it. Booking that call is success.
 
-OPENING: greet, say who you're with in one sentence, and ask if they have a
-quick moment. If it's a bad time, offer to find a better time and end politely.
+OPENING: greet, say in one sentence that you're with Gimmeleads and you help
+local businesses get online, and ask if they've got a quick moment. If it's a
+bad time, offer to find a better one and end politely.
 
-QUALIFY (ask naturally, don't interrogate):
-  1. Are you the right person to talk to about [DECISION AREA]?
-  2. [QUALIFYING QUESTION 2]
-  3. [QUALIFYING QUESTION 3]
+QUALIFY (natural, one question at a time):
+  1. Am I right that you don't have a website up yet, or just a social page?
+  2. Are you the right person to talk to about the business's online presence?
+  3. If we built you a free demo site to look at, would that be worth 15 minutes?
 
-IF QUALIFIED: offer two specific open slots and confirm one. Read the details
-back. Confirm the best number/email for the invite.
+IF INTERESTED: offer two specific open slots and confirm one. Read the details
+back and confirm the best email for the calendar invite and the demo link.
 
 GUARDRAILS:
-  - Never quote prices or make promises beyond booking the meeting.
-  - If asked something you don't know, say a specialist will cover it on the call.
-  - If they ask to be removed, acknowledge, mark do-not-contact, and end.
-  - Keep it conversational and brief. One question at a time.
+  - It's a FREE demo and a FREE review call — never quote prices or promise results.
+  - If asked something technical you don't know, say the specialist covers it on the call.
+  - If they ask to be removed, acknowledge, mark do-not-contact, and end the call.
+  - Keep it brief and human. Don't pitch hard. One question at a time.
 
-HAND OFF to a human if they ask to speak to someone or get frustrated.
+HAND OFF to a human if they ask or get frustrated.
 ```
 
 Give the agent **calendar access** (there's a booking/calendar setting on the
 agent) so it can offer real open slots and confirm on the call.
+
+> Later, when Phase 2 (selling the dialer as SaaS) begins, you'll clone this
+> agent with a different prompt and brand. This Gimmeleads agent is the internal
+> lead-gen caller.
 
 ---
 
@@ -74,9 +81,39 @@ Automation → **Workflows → Create workflow**.
   - *Not interested* → tag `not-interested`, remove from further calls
   - *No answer / voicemail* → wait, then **Send SMS** follow-up, optionally retry
 - **Action (all branches): Outbound Webhook → the bridge** so results reach
-  MogulOS. URL `https://<your-bridge-host>/webhook/centerfy`, header
-  `x-bridge-secret: <BRIDGE_SECRET>`, body with `route`, `contact`, `call`, and
-  `appointment` (see `bridge/README.md`).
+  MogulOS. URL `https://<your-bridge-host>/webhook/centerfy`, method POST,
+  header `x-bridge-secret: <BRIDGE_SECRET>`. Paste this **custom JSON body** and
+  map each value from the workflow's variable picker (the `{{…}}` tokens are GHL
+  variables — insert the real ones the builder offers; names vary slightly by
+  account):
+
+```json
+{
+  "event": "call_completed",
+  "route": "gimmeleads",
+  "contact": {
+    "phone": "{{contact.phone}}",
+    "email": "{{contact.email}}",
+    "firstName": "{{contact.first_name}}",
+    "business": "{{contact.company_name}}"
+  },
+  "call": {
+    "status": "{{call.status}}",
+    "disposition": "{{call.disposition}}",
+    "duration": "{{call.duration}}",
+    "summary": "{{call.summary}}",
+    "transcript": "{{call.transcript}}",
+    "recording_url": "{{call.recording_url}}"
+  }
+}
+```
+
+  Set `route` per campaign so results land in the right MogulOS sub-account (it
+  maps through `bridge/routing.json`). For the booking branch, also include an
+  `"appointment"` object with `calendarId`, `startTime`, and `title` so the
+  bridge books it in MogulOS. The bridge tolerates both these snake_case names
+  and clean camelCase, so don't worry if your account labels a variable slightly
+  differently.
 - **Publish** the workflow. Copy its id from the URL
   (`…/automation/workflow/<ID>`) into `dialer/.env` as `CENTERFY_WORKFLOW_ID`,
   then re-run `node src/cli.js verify` — it should now show the workflow resolves.
