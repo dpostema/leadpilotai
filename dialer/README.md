@@ -44,6 +44,27 @@ node src/cli.js push --in out/clean.csv --tag "spring-b2b"             # for rea
 `--dry-run` prints what would be sent without calling the API. Re-running `push`
 is safe: GHL upserts by phone within the location, so contacts aren't duplicated.
 
+## Feeding it from the Audit Engine (no-website harvest)
+
+The `audit-engine-harvest` skill produces a CSV of no-website B2B businesses
+(`priority, business_name, category, phone, address, zip, …`). `prep` reads that
+schema directly and can filter it, so the whole "find → clean → call" loop is:
+
+```bash
+# 1. harvest a ZIP with the audit-engine-harvest skill -> leads_harvest.csv
+# 2. keep only A/B tiers in the trades you want, clean + dedupe:
+node src/cli.js prep --in leads_harvest.csv --out out/clean.csv \
+  --min-priority B --category "plumber,roofing,hvac" --suppress dnc.txt
+# 3. dial them:
+node src/cli.js push --in out/clean.csv --tag "napoleon-harvest"
+```
+
+- `--min-priority A|B|C|D` — keep only rows at or above a tier (harvest ranks by review count: A=50+, B=10–49, C=1–9, D=none).
+- `--category "a,b,c"` — keep only rows whose category matches one of these (substring, case-insensitive).
+
+`zip`, `category`, and `priority` carry through to the cleaned file so you can
+segment campaigns.
+
 ## Compliance note (B2B)
 
 This is built for **B2B business-line** calling. Even so: scrub against the

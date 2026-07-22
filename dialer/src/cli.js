@@ -69,10 +69,22 @@ function cmdPrep(args) {
     suppress = loadSuppression(lines, defaultCountry);
   }
 
-  const { rows, report } = cleanRecords(records, { columnMap, defaultCountry, suppress });
+  const minPriority = args["min-priority"] ? String(args["min-priority"]) : null;
+  const categories = args.category ? String(args.category).split(",") : null;
+
+  const { rows, report } = cleanRecords(records, {
+    columnMap,
+    defaultCountry,
+    suppress,
+    minPriority,
+    categories,
+  });
 
   ensureDir(outFile);
-  const outCols = ["phone", "business", "firstName", "lastName", "email", "city", "state", "website"];
+  const outCols = [
+    "phone", "business", "firstName", "lastName", "email",
+    "city", "state", "website", "zip", "category", "priority",
+  ];
   const csv = stringify(rows.map((r) => Object.fromEntries(outCols.map((c) => [c, r[c]]))), {
     header: true,
     columns: outCols,
@@ -80,12 +92,16 @@ function cmdPrep(args) {
   writeFileSync(outFile, csv);
 
   console.log(`\nDetected columns: ${JSON.stringify(columnMap)}`);
+  if (minPriority) console.log(`Filter: min priority = ${minPriority}`);
+  if (categories) console.log(`Filter: categories = ${categories.join(", ")}`);
   console.log(`\nPrep report`);
-  console.log(`  input rows     : ${report.total}`);
-  console.log(`  kept (valid)   : ${report.kept}`);
-  console.log(`  invalid phone  : ${report.invalidPhone}`);
-  console.log(`  duplicates     : ${report.duplicates}`);
-  console.log(`  suppressed     : ${report.suppressed}`);
+  console.log(`  input rows       : ${report.total}`);
+  console.log(`  kept (valid)     : ${report.kept}`);
+  console.log(`  invalid phone    : ${report.invalidPhone}`);
+  console.log(`  duplicates       : ${report.duplicates}`);
+  console.log(`  suppressed (DNC) : ${report.suppressed}`);
+  if (minPriority) console.log(`  filtered priority: ${report.filteredPriority}`);
+  if (categories) console.log(`  filtered category: ${report.filteredCategory}`);
   console.log(`\nWrote ${rows.length} dialer-ready rows -> ${outFile}\n`);
 }
 

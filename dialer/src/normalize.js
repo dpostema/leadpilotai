@@ -46,16 +46,29 @@ export function normalizePhone(raw, defaultCountry = "US") {
 }
 
 // Common header spellings we auto-detect when the caller does not map columns.
+// Includes the audit-engine-harvest schema (business_name, zip, category, priority).
 const FIELD_ALIASES = {
   phone: ["phone", "phone number", "phonenumber", "mobile", "tel", "telephone", "number", "cell"],
-  business: ["business", "business name", "company", "company name", "name", "account", "organization"],
-  firstName: ["first name", "firstname", "first", "contact first name", "owner first name"],
+  business: ["business", "business name", "business_name", "company", "company name", "name", "account", "organization"],
+  firstName: ["first name", "firstname", "first", "contact first name", "owner first name", "owner_name"],
   lastName: ["last name", "lastname", "last", "contact last name", "owner last name"],
   email: ["email", "e-mail", "email address"],
   city: ["city", "town"],
   state: ["state", "province", "region"],
   website: ["website", "url", "site", "web"],
+  zip: ["zip", "zipcode", "zip code", "postal", "postal code", "postcode"],
+  category: ["category", "type", "business type", "niche", "industry"],
+  priority: ["priority", "tier"],
 };
+
+// Priority tier ranking for the harvest schema (A best … D lowest).
+const PRIORITY_RANK = { A: 4, B: 3, C: 2, D: 1 };
+
+function priorityRank(value) {
+  if (!value) return 0;
+  const key = String(value).trim().toUpperCase()[0];
+  return PRIORITY_RANK[key] || 0;
+}
 
 /** Build a header -> canonical-field map from the CSV's header row. */
 export function detectColumns(headers) {
@@ -72,12 +85,43 @@ export function detectColumns(headers) {
  * Clean a parsed list of row-objects.
  * Returns { rows, report } where rows are normalized keeper records.
  */
-export function cleanRecords(records, { columnMap, defaultCountry = "US", suppress = new Set() } = {}) {
-  const report = { total: records.length, kept: 0, invalidPhone: 0, duplicates: 0, suppressed: 0 };
+export function cleanRecords(
+  records,
+  { columnMap, defaultCountry = "US", suppress = new Set(), minPriority = null, categories = null } = {}
+) {
+  const report = {
+    total: records.length,
+    kept: 0,
+    invalidPhone: 0,
+    duplicates: 0,
+    suppressed: 0,
+    filteredPriority: 0,
+    filteredCategory: 0,
+  };
   const seen = new Set();
   const rows = [];
 
+  const minRank = minPriority ? priorityRank(minPriority) : 0;
+  const wantCats = categories ? categories.map((c) => c.toLowerCase().trim()).filter(Boolean) : null;
+
   for (const rec of records) {
+    const category = columnMap.category ? String(rec[columnMap.category] || "").trim() : "";
+    const priority = columnMap.priority ? String(rec[columnMap.priority] || "").trim() : "";
+
+    // Filter by priority tier (harvest schema) before touching the phone.
+    if (minRank && priorityRank(priority) < minRank) {
+      report.filteredPriority++;
+      continue;
+    }
+    // Filter by category (substring match against any requested category).
+    if (wantCats && wantCats.length) {
+      const cat = category.toLowerCase();
+      if (!wantCats.some((w) => cat.includes(w))) {
+        report.filteredCategory++;
+        continue;
+      }
+    }
+
     const rawPhone = columnMap.phone ? rec[columnMap.phone] : "";
     const { e164, valid, reason } = normalizePhone(rawPhone, defaultCountry);
 
@@ -104,6 +148,9 @@ export function cleanRecords(records, { columnMap, defaultCountry = "US", suppre
       city: columnMap.city ? String(rec[columnMap.city] || "").trim() : "",
       state: columnMap.state ? String(rec[columnMap.state] || "").trim() : "",
       website: columnMap.website ? String(rec[columnMap.website] || "").trim() : "",
+      zip: columnMap.zip ? String(rec[columnMap.zip] || "").trim() : "",
+      category,
+      priority,
       _phoneReason: reason,
     });
     report.kept++;
