@@ -1,0 +1,22 @@
+{
+  "name": "leadpilot-dialer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Internal B2B list -> Centerfy (white-label GHL) dialer pipeline for LeadPilot AI",
+  "bin": {
+    "dialer": "./src/cli.js"
+  },
+  "scripts": {
+    "prep": "node ./src/cli.js prep",
+    "push": "node ./src/cli.js push"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.6",
+    "csv-stringify": "^6.5.1",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
