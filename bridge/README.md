@@ -17,8 +17,13 @@ cd bridge
 npm install
 cp .env.example .env               # fill in BRIDGE_SECRET + MOGULOS_PIT_TOKEN
 cp routing.example.json routing.json   # map routes -> MogulOS location ids
+npm run verify                         # check token + every routed location resolves
 npm start
 ```
+
+`npm run verify` confirms the MogulOS token is accepted and that
+`DEFAULT_LOCATION_ID` plus every id in `routing.json` resolves to a real
+sub-account (prints each name), so a mistyped id can't reach production.
 
 - `MOGULOS_PIT_TOKEN` — a Private Integration Token from **MogulOS** (contacts + notes, plus calendars if booking).
 - `routing.json` — maps the `route` each Centerfy campaign sends to a MogulOS location id. Unknown routes fall back to `DEFAULT_LOCATION_ID`.

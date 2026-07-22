@@ -25,6 +25,15 @@ Get the values from your Centerfy **dialer sub-account**:
 
 ## Use
 
+**0. Verify your credentials first** (catches typos before any real dial):
+
+```bash
+node src/cli.js verify
+```
+
+Confirms the token works, the location resolves (prints its name), and the
+workflow id exists in that location. Fix any ✗ before running `push`.
+
 **1. Clean a list** (auto-detects common column names; normalizes to E.164, dedupes, drops invalid):
 
 ```bash

@@ -58,6 +58,12 @@ export class MogulosClient {
     return this.#request("POST", `/contacts/${contactId}/notes`, { body: bodyText });
   }
 
+  /** Look up a location (sub-account) by id — used by `verify`. Returns its name. */
+  async getLocationName(locationId) {
+    const data = await this.#request("GET", `/locations/${locationId}`);
+    return data?.location?.name || data?.name || "(unnamed)";
+  }
+
   /** Best-effort appointment creation (requires calendarId in the payload). */
   async createAppointment(locationId, contactId, appt) {
     const body = {

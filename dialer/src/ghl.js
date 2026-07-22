@@ -70,6 +70,16 @@ export class GhlClient {
   async addToWorkflow(contactId, workflowId) {
     return this.#request("POST", `/contacts/${contactId}/workflow/${workflowId}`, {});
   }
+
+  /** Look up a location (sub-account) by id — used by `verify`. */
+  async getLocation(locationId) {
+    return this.#request("GET", `/locations/${locationId}`);
+  }
+
+  /** List the workflows in a location — used by `verify` to confirm the id. */
+  async listWorkflows(locationId) {
+    return this.#request("GET", `/workflows/?locationId=${encodeURIComponent(locationId)}`);
+  }
 }
 
 /** Small helper: run async tasks with limited concurrency + a per-task delay. */

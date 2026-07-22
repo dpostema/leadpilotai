@@ -171,14 +171,79 @@ async function cmdPush(args) {
   void results;
 }
 
+async function cmdVerify() {
+  const problems = [];
+  const ok = (m) => console.log(`  ✓ ${m}`);
+  const bad = (m) => { console.log(`  ✗ ${m}`); problems.push(m); };
+
+  console.log("\nVerifying Centerfy (dialer) credentials...\n");
+
+  const token = process.env.CENTERFY_PIT_TOKEN;
+  const locationId = process.env.CENTERFY_LOCATION_ID;
+  const workflowId = process.env.CENTERFY_WORKFLOW_ID;
+
+  if (!token) bad("CENTERFY_PIT_TOKEN is not set in .env");
+  if (!locationId) bad("CENTERFY_LOCATION_ID is not set in .env");
+  if (problems.length) return finishVerify(problems);
+
+  const client = new GhlClient({
+    token,
+    locationId,
+    base: process.env.GHL_API_BASE,
+    version: process.env.GHL_API_VERSION,
+  });
+
+  // 1. Token + location resolve
+  const loc = await client.getLocation(locationId);
+  if (loc.status === 401) bad("Token rejected (401) — check CENTERFY_PIT_TOKEN");
+  else if (!loc.ok) bad(`Location "${locationId}" did not resolve (HTTP ${loc.status}) — check CENTERFY_LOCATION_ID`);
+  else {
+    const name = loc.data?.location?.name || loc.data?.name || "(unnamed)";
+    ok(`Token valid & location resolves: "${name}"`);
+  }
+
+  // 2. Workflow id present in this location
+  if (!workflowId) {
+    console.log("  – CENTERFY_WORKFLOW_ID not set — push will create contacts without enrolling them");
+  } else if (loc.ok) {
+    const wf = await client.listWorkflows(locationId);
+    if (!wf.ok) {
+      bad(`Could not list workflows (HTTP ${wf.status}) — ensure the token has the Workflows scope`);
+    } else {
+      const list = wf.data?.workflows || [];
+      const match = list.find((w) => w.id === workflowId);
+      if (match) ok(`Workflow resolves: "${match.name || workflowId}"`);
+      else {
+        bad(`CENTERFY_WORKFLOW_ID "${workflowId}" not found in this location`);
+        if (list.length) {
+          console.log("    Available workflows here:");
+          for (const w of list.slice(0, 10)) console.log(`      ${w.id}  ${w.name || ""}`);
+        }
+      }
+    }
+  }
+
+  finishVerify(problems);
+}
+
+function finishVerify(problems) {
+  if (problems.length) {
+    console.log(`\n✗ ${problems.length} problem(s) — fix .env before dialing.\n`);
+    process.exit(1);
+  }
+  console.log("\n✓ All checks passed. Safe to run push.\n");
+}
+
 async function main() {
   const [, , cmd, ...rest] = process.argv;
   const args = parseArgs(rest);
   try {
     if (cmd === "prep") cmdPrep(args);
     else if (cmd === "push") await cmdPush(args);
+    else if (cmd === "verify") await cmdVerify();
     else {
       console.log("Usage:");
+      console.log("  node src/cli.js verify");
       console.log("  node src/cli.js prep --in leads.csv --out out/clean.csv [--suppress dnc.txt]");
       console.log("  node src/cli.js push --in out/clean.csv [--tag name] [--dry-run]");
       process.exit(cmd ? 1 : 0);

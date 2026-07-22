@@ -8,6 +8,7 @@
     "dialer": "./src/cli.js"
   },
   "scripts": {
+    "verify": "node ./src/cli.js verify",
     "prep": "node ./src/cli.js prep",
     "push": "node ./src/cli.js push"
   },

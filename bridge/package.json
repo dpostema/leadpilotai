@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Return half of the MogulOS <-> Centerfy bridge: receive Centerfy call results and route them into the right MogulOS sub-account",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "verify": "node ./src/verify.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
