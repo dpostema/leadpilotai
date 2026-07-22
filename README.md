@@ -2,6 +2,12 @@
 
 ## Tools
 
+### [landing/](landing/)
+
+Self-contained marketing landing page for the LeadPilot AI outbound-caller
+product — hero with a live-call demo, how-it-works, features, pricing, and FAQ.
+Single `index.html`, responsive, light/dark aware. Original LeadPilot copy.
+
 ### [dialer/](dialer/)
 
 Internal B2B list → **Centerfy** (white-label GHL) voice-AI dialer pipeline.
