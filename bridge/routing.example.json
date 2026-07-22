@@ -1,0 +1,8 @@
+{
+  "_comment": "Maps the `route` field in each Centerfy webhook to a MogulOS sub-account (location) id. The Centerfy calling workflow sets `route` per campaign/client. Copy to routing.json and fill in real MogulOS location ids.",
+  "routes": {
+    "internal": "MOGULOS_LOCATION_ID_FOR_YOUR_OWN_LEADS",
+    "client-acme": "MOGULOS_LOCATION_ID_FOR_ACME",
+    "client-brightdental": "MOGULOS_LOCATION_ID_FOR_BRIGHTDENTAL"
+  }
+}
