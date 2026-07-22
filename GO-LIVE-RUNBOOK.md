@@ -4,9 +4,11 @@ The ordered checklist from "code is built" to "AI is booking meetings." Steps
 marked 🖥️ happen in your Centerfy/MogulOS dashboards (only you can do those);
 steps marked 💻 are commands you run locally.
 
-**Decision locked:** this is the **internal lead-gen** dialer. The calling brand
-is **Gimmeleads**, offering a free demo website + a 15-min review call. It is
-*not* selling the dialer (that's Phase 2, later, with a different agent/brand).
+**Decision locked:** this is the **internal lead-gen** dialer. The AI speaks as
+**Postema Media Management Studios (PMM)** — the studio that builds websites +
+AI agents — offering a free demo website *and* a live AI agent, and booking a
+15-min review call. ("Gimmeleads" is the internal campaign/list label, not spoken
+on the call.) It is *not* selling the dialer (that's Phase 2, different agent/brand).
 
 ---
 
@@ -80,7 +82,10 @@ legally own the right to call, keep to B2B business lines, scrub DNC via
 counsel on any list whose legal footing is unclear.
 
 ## Brand map (so it stays straight)
-- **Gimmeleads** — the lead-gen brand the AI *calls as* (this runbook).
+- **Postema Media Management Studios (PMM)** — the service brand the AI *calls as*;
+  sells & builds the websites + AI agents, and closes the booked review calls.
+- **Gimmeleads** — internal lead-gen campaign/list label (the dialer sub-account /
+  tags). Not spoken on the call.
 - **MogulOS** — your white-label GHL where results/CRM live (the storefront).
 - **LeadPilot AI** — the dialer product itself, for Phase 2 SaaS resale (later).
 - **Centerfy** — the hidden voice engine underneath it all.
