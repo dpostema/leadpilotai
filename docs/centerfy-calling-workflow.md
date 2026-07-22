@@ -95,25 +95,37 @@ audit-engine-harvest ─► dialer prep ─► dialer push (enrolls into this wo
 
 ---
 
-## Constraints you must design around (GHL native limits)
+## Constraints you must design around (Flexible Outbound Framework)
 
-These are real and they shape volume/architecture:
+HighLevel's **Voice AI Flexible Outbound Calling Framework** (which Centerfy
+inherits as a white-label platform) moved consent enforcement off the platform
+and lifted the old low caps. Current state:
 
-- **Opt-in gate.** GHL enforces contact **opt-in/consent** for outbound Voice AI.
-  This is the "can't call a raw list without opt-in" wall you already hit. For
-  B2B business lines, set the consent/opt-in field on import and keep to business
-  numbers; confirm whether Centerfy's white-label layer relaxes or keeps this.
-- **Rate limits (per sub-account/location):** ~1 call/min, **max ~100 calls/day**,
-  a rolling 14-day **max ~4 calls/contact**, and calling **10am–6pm the contact's
-  local time, US numbers only.**
-- **Volume implication:** ~100 calls/day/location means high volume needs
-  **multiple sub-accounts** (one reason the per-client architecture scales) or
-  Centerfy's own outbound rate rather than GHL-native. Plan campaigns to the cap.
+**Lifted:**
+- **No platform opt-in gate.** The platform no longer validates contact consent
+  before an outbound AI call. You can import raw B2B lists and the workflow runs
+  immediately — no native opt-in tag/form required.
+- **Volume:** eligible locations can place up to **~1,000 outbound calls/day**,
+  at up to **~10 calls/min** per location (was ~100/day and ~1/min).
 
-## Compliance (B2B)
-Business-line B2B is the lower-risk lane. Still: scrub DNC (`dialer prep
---suppress`), identify your company in the opening, respect the calling window,
-and honor removal requests (the agent prompt does this).
+**Still hard-enforced (cannot bypass):**
+- **Per-number caps:** a number can be called **once per day**, max **~14 times
+  over a rolling 14-day window**.
+- **Calling hours:** **8am–8pm local** to the recipient's area code.
+- **Geofencing:** domestic only — same country as the sub-account.
+
+**Architecture implication:** because one sub-account now clears ~1,000 calls/day
+at 10/min, the **single central-dialer model is viable** — you no longer need to
+shard modest volume across many sub-accounts just to beat a 100/day cap.
+
+## Compliance — this is now entirely on you
+The platform removing its opt-in gate does **not** remove the law. TCPA/FTC
+responsibility shifts fully to your business: Centerfy is just the conduit, and
+you must legally own the right to dial each lead. B2B business lines are the
+lower-risk lane, but still: scrub DNC (`dialer prep --suppress`), keep to
+business numbers, identify your company in the opening, respect the 8am–8pm
+window, and honor removal requests (the agent prompt does this). When in doubt
+on a list's legal footing, get counsel before dialing it.
 
 ---
 
