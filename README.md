@@ -1,5 +1,11 @@
 # LeadPilot AI
 
+## Docs
+
+- [docs/centerfy-calling-workflow.md](docs/centerfy-calling-workflow.md) — how to
+  build the Centerfy outbound Voice-AI calling workflow (agent + workflow +
+  limits) that the dialer feeds and the bridge reports on.
+
 ## Tools
 
 ### [landing/](landing/)
