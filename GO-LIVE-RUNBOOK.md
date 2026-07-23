@@ -82,10 +82,14 @@ legally own the right to call, keep to B2B business lines, scrub DNC via
 counsel on any list whose legal footing is unclear.
 
 ## Brand map (so it stays straight)
-- **Postema Media Management Studios (PMM)** — the service brand the AI *calls as*;
-  sells & builds the websites + AI agents, and closes the booked review calls.
-- **Gimmeleads** — internal lead-gen campaign/list label (the dialer sub-account /
-  tags). Not spoken on the call.
+- **Gimmeleads AI** — the LEAD-GEN COMPANY (the business). It runs the LeadPilot
+  dialer to generate leads. Used as the dialer sub-account / campaign label.
+  - **LeadPilot AI** — the DIALER PRODUCT that lives *inside* Gimmeleads (the tool
+    that does the calling; the Phase-2 SaaS you'd resell later).
+- **Postema Media Management Studios (PMM)** — the STUDIO that fulfills; builds the
+  websites + AI agents and closes the booked calls. The AI *calls as* PMM because
+  that's the service being offered on the phone.
 - **MogulOS** — your white-label GHL where results/CRM live (the storefront).
-- **LeadPilot AI** — the dialer product itself, for Phase 2 SaaS resale (later).
 - **Centerfy** — the hidden voice engine underneath it all.
+
+One sentence: **Gimmeleads AI runs the LeadPilot dialer to book demos for PMM.**
