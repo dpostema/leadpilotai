@@ -1,0 +1,23 @@
+{
+  "event": "call_completed",
+  "route": "gimmeleads",
+  "contact": {
+    "phone": "+14195550142",
+    "email": "owner@example.com",
+    "firstName": "Sam",
+    "business": "Acme Roofing"
+  },
+  "call": {
+    "status": "completed",
+    "disposition": "interested",
+    "duration": 83,
+    "summary": "Owner is interested in the free demo site + AI agent. Booked a review call.",
+    "transcript": "Riley: Hi, this is Riley with Postema Media Management Studios...",
+    "recording_url": "https://example.com/recordings/demo.mp3"
+  },
+  "appointment": {
+    "calendarId": "REPLACE_WITH_MOGULOS_CALENDAR_ID",
+    "startTime": "2026-07-25T14:00:00Z",
+    "title": "PMM website + AI agent review"
+  }
+}

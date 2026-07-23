@@ -10,7 +10,8 @@
   "scripts": {
     "verify": "node ./src/cli.js verify",
     "prep": "node ./src/cli.js prep",
-    "push": "node ./src/cli.js push"
+    "push": "node ./src/cli.js push",
+    "test": "node --test"
   },
   "dependencies": {
     "csv-parse": "^5.5.6",

@@ -64,6 +64,18 @@ call completes:
 - Body: map the fields above (set `route` per campaign/client so results land in
   the right MogulOS account).
 
+## Testing
+
+```bash
+npm test              # unit tests for the payload router (offline)
+npm run send-test     # fire samples/call-completed.json at a running bridge
+```
+
+`send-test` needs the bridge running (`npm start`) and `BRIDGE_SECRET` set — it
+POSTs a realistic call result so you can confirm parsing/routing (and, with real
+creds, the MogulOS write) before any live call. Pass a path to use your own
+payload: `npm run send-test my-payload.json`.
+
 ## Note on hosting
 
 Runs anywhere Node runs and can reach `services.leadconnectorhq.com` (the GHL

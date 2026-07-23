@@ -53,6 +53,12 @@ node src/cli.js push --in out/clean.csv --tag "spring-b2b"             # for rea
 `--dry-run` prints what would be sent without calling the API. Re-running `push`
 is safe: GHL upserts by phone within the location, so contacts aren't duplicated.
 
+## Testing
+
+```bash
+npm test    # unit tests for phone normalization, dedupe, DNC, and harvest filters
+```
+
 ## Feeding it from the Audit Engine (no-website harvest)
 
 The `audit-engine-harvest` skill produces a CSV of no-website B2B businesses
