@@ -25,11 +25,19 @@ BRAND & TONE: confident, energetic, a little bold. Tagline vibe: "Your AI sales
 team that never sleeps." Audience is busy local business owners (contractors,
 dentists, salons, home services). Benefit-led, plain language, no jargon.
 
-DESIGN:
-- Dark premium base (#0a0c14) with an electric gradient accent (indigo #6366f1 ->
-  cyan #22d3ee). Big tight headlines (800 weight), generous spacing, rounded
-  cards, subtle glow. An animated audio-waveform motif near the click-to-call
-  widget to signal "voice." Fully responsive, light/dark aware, fast, accessible.
+DESIGN — use the Gimmeleads brand palette (modernized, NOT the old glossy style):
+- Brand colors: sky/cyan blue #2FA8E0 (primary), deep royal blue #1B5FA8, gold
+  accent #FFC61A, near-white #F7FAFC, ink #0B1E33.
+- Base look: a bold dark-navy base (#0B1E33) with cyan-blue surfaces and GOLD
+  (#FFC61A) call-to-action buttons and highlight words — blue-and-gold is the
+  brand signature. (If a light theme is preferred, white base, blue headers,
+  gold CTAs.)
+- Modern and clean — NOT the old chrome/beveled/web-2.0 look. Flat, premium,
+  big tight headlines (800 weight), generous spacing, rounded cards, subtle glow.
+- Logo: a clean modern "Gimmeleads AI" wordmark — gold "Gimme", blue "Leads" (or
+  all-gold on navy), no bevel/chrome. Small chat-bubble or spark mark optional.
+- An animated audio-waveform motif (in cyan->gold) near the click-to-call widget
+  to signal "voice." Fully responsive, light/dark aware, fast, accessible.
   Modern sans-serif (Inter). React + TailwindCSS.
 
 SECTIONS (single landing page):
