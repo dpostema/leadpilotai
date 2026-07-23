@@ -28,15 +28,18 @@ dentists, salons, home services). Benefit-led, plain language, no jargon.
 DESIGN — premium GOLD + CHROME on a BLACK background (Gimmeleads brand, elevated):
 - Brand colors: true black #000000 base (near-black #0A0A0C for raised surfaces/
   cards), metallic gold #C9A227 (accent gradient #EBD07A -> #B8860B), chrome/silver
-  (gradient #E6E9ED -> #9AA1AA -> #C7CCD1), supporting blue #2FA8E0 used sparingly,
+  (gradient #E6E9ED -> #9AA1AA -> #C7CCD1), sky/cyan blue #2FA8E0 (nav bar + accent/
+  highlight words), deep royal blue #1B5FA8 (logo outline + deeper blue accents),
   near-white #F5F6F8 text. NO bright yellow.
 - Look: black background with brushed-metallic GOLD headings and CTA buttons (subtle
-  gold gradient sheen), CHROME/silver hairline borders, dividers, and icon accents.
-  Premium/luxe and modern — tasteful metallic sheen and thin chrome lines on black,
-  NOT the old heavy plastic bevel. Big tight headlines (800 weight), generous
-  spacing, rounded cards on near-black surfaces, subtle gold glow.
+  gold gradient sheen), CHROME/silver hairline borders, dividers, and icon accents,
+  and CYAN-BLUE (#2FA8E0) for the nav bar and highlighted accent words. Premium/luxe
+  and modern — tasteful metallic sheen and thin chrome lines on black, NOT the old
+  heavy plastic bevel. Big tight headlines (800 weight), generous spacing, rounded
+  cards on near-black surfaces, subtle gold glow.
 - Logo: a modern "Gimmeleads AI" wordmark in metallic gold with a fine chrome edge
-  on navy (no heavy bevel). Small chat-bubble or spark mark optional.
+  and a deep royal-blue (#1B5FA8) outline on black (no heavy bevel). Small
+  chat-bubble or spark mark optional.
 - An animated audio-waveform motif (gold with a chrome shimmer) near the
   click-to-call widget to signal "voice." Fully responsive, fast, accessible.
   Modern sans-serif (Inter). React + TailwindCSS.
